@@ -1,0 +1,23 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://Scenes/CaveMap.gd" type="Script" id=1]
+[ext_resource path="res://Scenes/Item.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Scenes/Creature.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Resources/CaveTileSet.tres" type="TileSet" id=4]
+
+[node name="CaveMap" type="Node2D"]
+script = ExtResource( 1 )
+Item = ExtResource( 2 )
+Creature = ExtResource( 3 )
+
+[node name="PrimMap" type="TileMap" parent="."]
+tile_set = ExtResource( 4 )
+cell_size = Vector2( 16, 16 )
+format = 1
+
+[node name="SecoMap" type="TileMap" parent="."]
+tile_set = ExtResource( 4 )
+cell_size = Vector2( 16, 16 )
+format = 1
+
+[node name="MainCreature" parent="." instance=ExtResource( 3 )]

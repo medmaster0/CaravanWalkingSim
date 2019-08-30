@@ -1,0 +1,42 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://Game.gd" type="Script" id=1]
+[ext_resource path="res://Scenes/Creature.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Scenes/Item.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Scenes/CaveMap.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Scenes/Trap.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Tiles/blank.png" type="Texture" id=6]
+[ext_resource path="res://InterfaceWindows/ItemDisplay.tscn" type="PackedScene" id=7]
+[ext_resource path="res://InterfaceWindows/CreatureDisplay.tscn" type="PackedScene" id=8]
+
+[node name="Game" type="Node"]
+script = ExtResource( 1 )
+Creature = ExtResource( 2 )
+Item = ExtResource( 3 )
+CaveMap = ExtResource( 4 )
+
+[node name="TileMap" type="TileMap" parent="."]
+cell_size = Vector2( 16, 16 )
+format = 1
+
+[node name="Trap" parent="." instance=ExtResource( 5 )]
+position = Vector2( 32, 0 )
+
+[node name="BackgroundSprite" type="Sprite" parent="."]
+z_index = -6
+texture = ExtResource( 6 )
+
+[node name="HUDLayer" type="CanvasLayer" parent="."]
+
+[node name="ItemDisplay" parent="HUDLayer" instance=ExtResource( 7 )]
+visible = false
+position = Vector2( 0, 480 )
+
+[node name="CreatureDisplay" parent="HUDLayer" instance=ExtResource( 8 )]
+visible = false
+position = Vector2( 0, 480 )
+
+[node name="MainCamera" type="Camera2D" parent="."]
+current = true
+drag_margin_h_enabled = false
+drag_margin_v_enabled = false

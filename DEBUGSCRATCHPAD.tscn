@@ -1,0 +1,19 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://DEBUGSCRATCHPAD.gd" type="Script" id=1]
+[ext_resource path="res://Scenes/Pheasant.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Scenes/MajorArcWeapon.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Scenes/Item.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Scenes/Creature.tscn" type="PackedScene" id=5]
+
+[node name="DebugScratch" type="Node2D"]
+script = ExtResource( 1 )
+Pheasant = ExtResource( 2 )
+MajorArcWeapon = ExtResource( 3 )
+Item = ExtResource( 4 )
+
+[node name="Pheasant" parent="." instance=ExtResource( 2 )]
+position = Vector2( 58.2222, 46.2222 )
+
+[node name="Creature" parent="." instance=ExtResource( 5 )]
+position = Vector2( 35.5556, 49.3333 )
