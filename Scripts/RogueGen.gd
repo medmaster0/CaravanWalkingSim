@@ -149,8 +149,6 @@ func GenerateVault_v1(map_size):
 					map[random_point2.x+1][random_point.y-1] = wall_id
 				
 				
-				
-				
 			1:
 				#Vertical first, then vertical
 				map = v_path(random_point.y, random_point2.y, random_point.x, map)
@@ -169,10 +167,6 @@ func GenerateVault_v1(map_size):
 					
 				if map[random_point.x+1][random_point2.y-1] != floor_id:
 					map[random_point.x+1][random_point2.y-1] = wall_id
-
-				
-				
-				
 			
 		
 		counter = counter + 1
@@ -186,6 +180,8 @@ func GenerateVault_v1(map_size):
 	
 	return(map_data)
 	
+
+
 #Find a random point in a rectangle
 func inside_rect(rect):
 	var rx = rect.position.x + randi()%int(rect.size.x-1) + 1
@@ -380,6 +376,98 @@ func int_array_sort(a,b):
 	return a < b
 	
 	
+
+
+#Generate County Map
+#Many rectangles (almost like rooms) each interconnected
+# 0 - Roads (empty space)
+# 1 - Towns (blocked space)
+#returns a dicitonary to...
+# map : individual pixel data in a 2D array, XY-accessed
+# rooms : a list of structures containing a (Rect2 and colors...)
+func GenerateCountyMap(map_size, num_rooms):
+	randomize() 
+	
+	var map = [] #the main map (2D array) that we will return map[x][y]
+	var blank_id = 8888 #The ID for unmapped tiles
+	var road_id = 0 #The ID for road tiles
+	var town_id = 1 #The ID for town tiles
+	var tiles_per_neighboorhood_block = 8 #an 8 x 8 square...
+	var neighbor_blocks_x = int(map_size.x) / 8
+	var neighbor_blocks_y = int(map_size.y) / 8
+
+	#Some variables to keep everything together
+	var street_prim_col = Color(randf(),randf(),randf())
+	var street_seco_col = Color(randf(),randf(),randf())
+	var street_tert_col #will be dtermined later...
+	var street_quad_col #will be dtermined later...
+	#var street_tert_col = Color(randf(),randf(),randf())
+	#var street_quad_col = Color(randf(),randf(),randf())
+
+	#Initialize map 2D array
+	for x in range(map_size.x):
+		var column = [] #empty array
+		for y in range(map_size.y):
+			column.append(blank_id)
+		map.append(column)
+		
+	#Create the rooms
+	var rooms = [] #a list of room data
+	for room in range(num_rooms):
+		#random parameters
+		var length = (randi()%5+5)*tiles_per_neighboorhood_block #a multiple that can fit street blocks
+		var x = (randi()%neighbor_blocks_x) * tiles_per_neighboorhood_block
+		var height = (randi()%5+5)*tiles_per_neighboorhood_block #a multiple that can fit street blocks
+		var y = (randi()%neighbor_blocks_y) * tiles_per_neighboorhood_block
+		var temp_room = Rect2(x, y, length, height)
+		
+		#check if this room intersects any of the other ones...
+		var does_intersect = false
+		if !rooms.empty():
+			for other_room in rooms:
+				if temp_room.intersects(other_room.rect):
+					does_intersect = true
+					print("intersection")
+			#also do bounds checking....
+			if (temp_room.position.x + (temp_room.size.x*tiles_per_neighboorhood_block)) >= (map_size.x ):
+				print("outta bound")
+				does_intersect = true
+			if (temp_room.position.y + (temp_room.size.y*tiles_per_neighboorhood_block)) >= (map_size.y ):
+				print("outta bound")
+				does_intersect = true
+					
+		if does_intersect == false:
+			#But if we made it here, it didn't intersect, so add it
+			
+			var room_data = {
+				"rect":temp_room,
+				"street_prim_color":street_prim_col,
+				"street_seco_color":street_seco_col,
+				"street_tert_color":Color(randf(),randf(),randf()),
+				"street_quad_color":Color(randf(),randf(),randf())
+			}
+			
+			rooms.append(room_data)
+			
+			print(x)
+			print(y)
+			print(map_size.y)
+			
+			#Carve out the room
+			for tx in range(length):
+				for ty in range(height):
+					#Set the proper codes
+					map[x+tx][y+ty] = town_id
+					
+	var map_data = {
+		
+		"map": map,
+		"rooms": rooms #rooms are a structure containing a rect2 and colors...
+		
+		}
+			
+	return(map_data)
+
 
 #Generate Flow Map
 #Reads in a maze array (2D, 0 for empty, 1 for blocked)

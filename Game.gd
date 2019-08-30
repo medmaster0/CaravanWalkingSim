@@ -27,6 +27,10 @@ var map_items = [] #items that can be picked up...
 var map_buildings = [] #building items (no diff between top and bottom) -> Always under creature
 var neighboorhood_layout #will hold the neighborhood layout data
 var neighboorhood_flow_map #Will hold the layout flow data
+
+var county_layout #Will the the layout of the whole county (where is road, where is town)
+var county_flow_map #Used for drawing the streets between each town
+
 var wall_indices = [102] #tile indices that creatures can't walk through
 var street_blocks = [] #will hold the street block objects
 
@@ -105,10 +109,17 @@ func _ready():
 	#DEBUG -> inject random creature into caveMap
 	#$CaveMap.enterMainCreature(map_creatures[randi()%map_creatures.size()])
 	
+	#Generate total county map
+	var county_data = RogueGen.GenerateCountyMap(Vector2(max_x_map, max_y_map), 8)
+	print(county_data.rooms)
+	
+	
 	#Generate Neighborhood Layout
 	neighboorhood_layout = RogueGen.GenerateCorridorMaze(8,8,1)
 	neighboorhood_flow_map = RogueGen.DetermineFlowMap(neighboorhood_layout)
 	
+	#var tiles_per_road_block = 4 #(4 x 4) squares
+	#BuildingGen.put_flow_map_street(self, 0,0,0,neighboorhood_flow_map)
 	
 #	#Construct the neighboorhood
 #	var tiles_per_plot = 8 #how many tiles are on each building plot
@@ -125,51 +136,8 @@ func _ready():
 	
 	#Construct the roads (based on flow)
 	
-	var tiles_per_road_block = 4 #(4 x 4) squares
 	
-	BuildingGen.put_flow_map_street(self, 0,0,0,neighboorhood_flow_map)
 	
-#	for i in neighboorhood_flow_map.size(): #the x dim
-#		for j in neighboorhood_flow_map[i].size(): #the y dim
-#			var temp_x_coord = i * $TileMap.cell_size.x * tiles_per_road_block
-#			var temp_y_coord = j * $TileMap.cell_size.y * tiles_per_road_block
-#			var temp_z_coord = 0
-#			var block_type = neighboorhood_flow_map[i][j]
-#			match(block_type):
-#				'0000':
-#					BuildingGen.put_just_road_block(self, temp_x_coord, temp_y_coord, temp_z_coord, 4, 0)
-#				'0001':
-#					BuildingGen.put_just_road_block(self, temp_x_coord, temp_y_coord, temp_z_coord, 3, 0)
-#				'0010':
-#					BuildingGen.put_just_road_block(self, temp_x_coord, temp_y_coord, temp_z_coord, 3, 2)
-#				'0011':
-#					BuildingGen.put_just_road_block(self, temp_x_coord, temp_y_coord, temp_z_coord, 1, 0)
-#				'0100':
-#					BuildingGen.put_just_road_block(self, temp_x_coord, temp_y_coord, temp_z_coord, 3, 1)
-#				'0101':
-#					BuildingGen.put_just_road_block(self, temp_x_coord, temp_y_coord, temp_z_coord, 2, 1)
-#				'0110':
-#					BuildingGen.put_just_road_block(self, temp_x_coord, temp_y_coord, temp_z_coord, 2, 2)
-#				'0111':
-#					print("nothing")
-#				'1000':
-#					BuildingGen.put_just_road_block(self, temp_x_coord, temp_y_coord, temp_z_coord, 3, 3)
-#				'1001':
-#					BuildingGen.put_just_road_block(self, temp_x_coord, temp_y_coord, temp_z_coord, 2, 0)
-#				'1010':
-#					BuildingGen.put_just_road_block(self, temp_x_coord, temp_y_coord, temp_z_coord, 2, 3)
-#				'1011':
-#					print("nothing")
-#				'1100':
-#					BuildingGen.put_just_road_block(self, temp_x_coord, temp_y_coord, temp_z_coord, 1, 1)
-#				'1101':
-#					print("nothing")
-#				'1110':
-#					print("nothing")
-#				'1111':
-#					print("nothing")
-#				'XXXX':
-#					print("nothing")
 
 	#Create the creature
 	main_creature = Creature.instance()

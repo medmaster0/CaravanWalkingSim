@@ -271,9 +271,6 @@ func put_just_road_block(game_scene, x_coord_global, y_coord_global, z_coord, bl
 #FUnction that will layout road tiles down according to an input flowmap
 #input the top left corner of flow map
 func put_flow_map_street(game_scene, x_coord_global, y_coord_global, z_coord, flow_map):
-	for row in flow_map:
-		print(row)
-		
 	
 	var tiles_per_road_block = 4 #(a 4x4 square)
 	
@@ -318,3 +315,54 @@ func put_flow_map_street(game_scene, x_coord_global, y_coord_global, z_coord, fl
 					print("nothing")
 				'XXXX':
 					print("nothing")
+
+#Function that will generate and put down a town according to a neighborhood layout
+func put_down_town(neighborhood_map, x_coord_global, y_coord_global, z_coord, flow_map):
+	
+	var tiles_per_plot = 8
+	
+	#Construct the roads (based on flow)
+	for i in flow_map.size(): #the x dim
+		for j in flow_map[i].size(): #the y dim
+			var temp_x_coord = i * $TileMap.cell_size.x * tiles_per_plot
+			var temp_y_coord = j * $TileMap.cell_size.y * tiles_per_plot
+			var temp_z_coord = 0
+			var block_type = flow_map[i][j]
+			match(block_type):
+				'0000':
+					BuildingGen.put_street_block(self, temp_x_coord, temp_y_coord, temp_z_coord, 4, 0)
+				'0001':
+					BuildingGen.put_street_block(self, temp_x_coord, temp_y_coord, temp_z_coord, 3, 0)
+				'0010':
+					BuildingGen.put_street_block(self, temp_x_coord, temp_y_coord, temp_z_coord, 3, 2)
+				'0011':
+					BuildingGen.put_street_block(self, temp_x_coord, temp_y_coord, temp_z_coord, 1, 0)
+				'0100':
+					BuildingGen.put_street_block(self, temp_x_coord, temp_y_coord, temp_z_coord, 3, 1)
+				'0101':
+					BuildingGen.put_street_block(self, temp_x_coord, temp_y_coord, temp_z_coord, 2, 1)
+				'0110':
+					BuildingGen.put_street_block(self, temp_x_coord, temp_y_coord, temp_z_coord, 2, 2)
+				'0111':
+					BuildingGen.put_street_block(self, temp_x_coord, temp_y_coord, temp_z_coord, 0, 2)
+				'1000':
+					BuildingGen.put_street_block(self, temp_x_coord, temp_y_coord, temp_z_coord, 3, 3)
+				'1001':
+					BuildingGen.put_street_block(self, temp_x_coord, temp_y_coord, temp_z_coord, 2, 0)
+				'1010':
+					BuildingGen.put_street_block(self, temp_x_coord, temp_y_coord, temp_z_coord, 2, 3)
+				'1011':
+					BuildingGen.put_street_block(self, temp_x_coord, temp_y_coord, temp_z_coord, 0, 0)
+				'1100':
+					BuildingGen.put_street_block(self, temp_x_coord, temp_y_coord, temp_z_coord, 1, 1)
+				'1101':
+					BuildingGen.put_street_block(self, temp_x_coord, temp_y_coord, temp_z_coord, 0, 1)
+				'1110':
+					BuildingGen.put_street_block(self, temp_x_coord, temp_y_coord, temp_z_coord, 0, 3)
+				'1111':
+					print("nothing")
+				'XXXX':
+					BuildingGen.put_street_block(self, temp_x_coord, temp_y_coord, temp_z_coord, 5, 0)
+	
+	
+	
