@@ -427,13 +427,10 @@ func GenerateCountyMap(map_size, num_rooms):
 			for other_room in rooms:
 				if temp_room.intersects(other_room.rect):
 					does_intersect = true
-					print("intersection")
 			#also do bounds checking....
 			if (temp_room.position.x + (temp_room.size.x*tiles_per_neighboorhood_block)) >= (map_size.x ):
-				print("outta bound")
 				does_intersect = true
 			if (temp_room.position.y + (temp_room.size.y*tiles_per_neighboorhood_block)) >= (map_size.y ):
-				print("outta bound")
 				does_intersect = true
 					
 		if does_intersect == false:
@@ -449,16 +446,14 @@ func GenerateCountyMap(map_size, num_rooms):
 			
 			rooms.append(room_data)
 			
-			print(x)
-			print(y)
-			print(map_size.y)
-			
 			#Carve out the room
 			for tx in range(length):
 				for ty in range(height):
 					#Set the proper codes
 					map[x+tx][y+ty] = town_id
 					
+	
+	
 	var map_data = {
 		
 		"map": map,
@@ -566,3 +561,31 @@ func DetermineFlowMap(maze_map):
 			flow_map[i][j] = flow_code
 			
 	return(flow_map)
+
+
+#DECIMATION of MAP
+#Decimates an input map (a 2d array)
+#Specify how many tiles to combine into 1
+func DecimateMap(in_map, tiles_to_decimate):
+	var blank_id = 8888 #just  adummy value...
+	var new_x_dim = int(in_map.size()) / tiles_to_decimate
+	var new_y_dim = int(in_map[0].size()) / tiles_to_decimate
+	
+	var out_map = [] #The map to be returned...
+	for x in range(new_x_dim):
+		var column = [] #empty array
+		for y in range(new_y_dim):
+			column.append(blank_id)
+		out_map.append(column)
+	
+	#Now cycle through each value of the out_map and smple from the in_map
+	for i in range(out_map.size()):
+		for j in range(out_map[i].size()):
+			
+			var x_index = tiles_to_decimate * i
+			var y_index = tiles_to_decimate * j
+			out_map[i][j] = in_map[x_index][y_index]
+
+	
+	return(out_map)
+	

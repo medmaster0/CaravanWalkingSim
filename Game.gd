@@ -43,11 +43,11 @@ var cell_size #the amount of pixels in a cell/tile
 
 
 #BROADER WORLD VARS
-var max_x_map = 1000#in map tiles
-var max_y_map = 1000#in map tiles
+var max_x_map = 2000#in map tiles
+var max_y_map = 2000#in map tiles
 var min_x_map = 0
 var min_y_map = 0
-var max_z_map = 2 #How high the map goes
+var max_z_map = 1 #How high the map goes
 var min_z_map = 0 #The lowest level
 
 #More Globals
@@ -111,10 +111,12 @@ func _ready():
 	
 	#Generate total county map
 	var county_data = RogueGen.GenerateCountyMap(Vector2(max_x_map, max_y_map), 8)
-	print(county_data.rooms)
 	
+	var decimated_map = RogueGen.DecimateMap(county_data.map, 4)
+	print(decimated_map.size())
+
 	
-	#Generate Neighborhood Layout
+	#Generate Neighborhood Layout... Irrelevant at the moment...
 	neighboorhood_layout = RogueGen.GenerateCorridorMaze(8,8,1)
 	neighboorhood_flow_map = RogueGen.DetermineFlowMap(neighboorhood_layout)
 	

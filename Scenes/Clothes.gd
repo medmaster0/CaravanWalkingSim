@@ -30,7 +30,6 @@ func _ready():
 
 #Function to set the tile index
 func set_tile_index(index):
-	print("this isets")
 	match(index):
 		0:
 			#Angel... No need to set colors
